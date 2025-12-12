@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { incrementQuantity, decrementQuantity } from "./venueSlice";
 import { incrementAvQuantity, decrementAvQuantity } from "./avSlice";
 import { toggleMealSelection }  from "./mealsSlice";
+import PropTypes from 'prop-types';
+
 const ConferenceEvent = () => {
     const [showItems, setShowItems] = useState(false);
     const [numberOfPeople, setNumberOfPeople] = useState(1);
@@ -105,42 +107,6 @@ const ConferenceEvent = () => {
                 
     const items = getItemsFromTotalCost();
 
-    const ItemsDisplay = ({ items }) => {
-      console.log(items);
-      return <>
-        <div className="display_box1">
-          {items.length === 0 && <p>No items selected.</p>}
-          <table className="table_item_data">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Unit Cost</th>
-                <th>Quantity</th>
-                <th>Subtotal</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.name}</td>
-                  <td>${item.cost}</td>
-                  <td>
-                    {item.type === "meals" || item.numberOfPeople
-                    ? ` For ${numberOfPeople} people`
-                    : item.quantity}
-                  </td>
-                  <td>
-                    {item.type === "meals" || item.numberOfPeople
-                      ? `$${item.cost * numberOfPeople}`
-                      : `$${item.cost * item.quantity}`}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </>
-    };
     const calculateTotalCost = (section) => {
         let totalCost = 0;
         if (section === "venue") {
@@ -327,7 +293,7 @@ const ConferenceEvent = () => {
                         </div>
                     ) : (
                         <div className="total_amount_detail">
-                            <TotalCost totalCosts={totalCosts} handleClick={handleToggleItems} ItemsDisplay={() => <ItemsDisplay items={items} />} />
+                            <TotalCost totalCosts={totalCosts} handleClick={handleToggleItems} ItemsDisplay={() => <ItemsDisplay items={items} numberOfPeople={numberOfPeople} />} />
                         </div>
                     )
                 }
@@ -339,6 +305,48 @@ const ConferenceEvent = () => {
         </>
 
     );
+};
+
+const ItemsDisplay = ({ items, numberOfPeople }) => {
+  console.log(items);
+  return <>
+    <div className="display_box1">
+      {items.length === 0 && <p>No items selected.</p>}
+      <table className="table_item_data">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Unit Cost</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item, index) => (
+            <tr key={index}>
+              <td>{item.name}</td>
+              <td>${item.cost}</td>
+              <td>
+                {item.type === "meals" || item.numberOfPeople
+                ? ` For ${numberOfPeople} people`
+                : item.quantity}
+              </td>
+              <td>
+                {item.type === "meals" || item.numberOfPeople
+                  ? `$${item.cost * numberOfPeople}`
+                  : `$${item.cost * item.quantity}`}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </>
+};
+
+ItemsDisplay.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  numberOfPeople: PropTypes.number.isRequired,
 };
 
 export default ConferenceEvent;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "./TotalCost.css";
+import PropTypes from 'prop-types';
 
 const TotalCost = ({ totalCosts, ItemsDisplay }) => {
 
@@ -24,6 +25,15 @@ const total_amount = totalCosts.venue + totalCosts.av + totalCosts.meals;
       </div>
     </div>
   );
+};
+
+TotalCost.propTypes = {
+  totalCosts: PropTypes.shape({
+    venue: PropTypes.number.isRequired,
+    av: PropTypes.number.isRequired,
+    meals: PropTypes.number.isRequired,
+  }).isRequired,
+  ItemsDisplay: PropTypes.func.isRequired,
 };
 
 export default TotalCost;

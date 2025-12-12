@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
 import "./TotalCost.css";
 import PropTypes from 'prop-types';
 
-const TotalCost = ({ totalCosts, ItemsDisplay }) => {
+const TotalCost = ({ totalCosts, handleClick, ItemsDisplay }) => {
 
 
 const total_amount = totalCosts.venue + totalCosts.av + totalCosts.meals;
@@ -21,6 +20,9 @@ const total_amount = totalCosts.venue + totalCosts.av + totalCosts.meals;
             <div className='render_items'>
               <ItemsDisplay />
             </div>
+            <button className="details_button" onClick={handleClick}>
+              Back
+            </button>
         </div>
       </div>
     </div>
@@ -33,6 +35,7 @@ TotalCost.propTypes = {
     av: PropTypes.number.isRequired,
     meals: PropTypes.number.isRequired,
   }).isRequired,
+  handleClick: PropTypes.func.isRequired,
   ItemsDisplay: PropTypes.func.isRequired,
 };
 
